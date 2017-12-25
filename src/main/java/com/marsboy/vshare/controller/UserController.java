@@ -69,4 +69,11 @@ public class UserController {
 		}
 		return modelAndView;
 	}
+	
+	@RequestMapping(value="/home",method=RequestMethod.GET)
+	public ModelAndView goToHome() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("home");
+		return modelAndView;
+	}
 }
