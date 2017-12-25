@@ -76,4 +76,12 @@ public class UserController {
 		modelAndView.setViewName("home");
 		return modelAndView;
 	}
+	@RequestMapping(value="/logout",method=RequestMethod.GET)
+	public ModelAndView goLogOut() {
+		ModelAndView modelAndView = new ModelAndView();
+		User user = new User();
+		modelAndView.addObject("user", user);
+		modelAndView.setViewName("login");
+		return modelAndView;
+	}
 }
