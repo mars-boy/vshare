@@ -1,5 +1,6 @@
 package com.marsboy.vshare.controller;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/home",method=RequestMethod.GET)
-	public ModelAndView goToHome() {
+	public ModelAndView goToHome(HttpSession httpSession) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("home");
 		return modelAndView;
