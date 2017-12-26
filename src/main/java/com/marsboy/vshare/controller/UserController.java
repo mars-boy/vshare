@@ -79,4 +79,16 @@ public class UserController {
 		modelAndView.setViewName("login");
 		return modelAndView;
 	}
+	@RequestMapping(value="/access-denied",method=RequestMethod.GET)
+	public ModelAndView accessDenied() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("access-denied");
+		return modelAndView;
+	}
+	@RequestMapping(value = "/error",method=RequestMethod.POST)
+	public ModelAndView error() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("error");
+		return modelAndView;
+	}
 }
