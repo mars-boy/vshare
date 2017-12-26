@@ -44,9 +44,7 @@ public class UserController {
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
-		System.out.println("1");
 		User userExists = videoService.getUserByUsername(user.getUsername());
-		System.out.println("2");
 		if (userExists != null) {
 			bindingResult.rejectValue("email", "error.user",
 					"There is already a user registered with the email provided");
@@ -54,14 +52,11 @@ public class UserController {
 		if (bindingResult.hasErrors()) {
 			modelAndView.setViewName("registration");
 		} else {
-			System.out.println("In save");
-			System.out.println("user data ::"+user.getUsername()+" password :: "+user.getPassword());
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			user.setActive((byte) 1);
 			Role role = new Role((byte)1,"ADMIN");
 			user.setRole(role);
 			videoService.saveOrUpdate(user);
-			System.out.println("failed");
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("user", new User());
 			modelAndView.setViewName("registration");
