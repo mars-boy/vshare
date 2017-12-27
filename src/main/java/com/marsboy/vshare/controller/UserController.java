@@ -1,9 +1,15 @@
 package com.marsboy.vshare.controller;
 
+import java.util.Enumeration;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -68,17 +74,33 @@ public class UserController {
 	
 	@RequestMapping(value="/home",method=RequestMethod.GET)
 	public ModelAndView goToHome(HttpSession httpSession) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("Logged in user :: "+auth.getName());
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("home");
+		httpSession.setAttribute("UserName",auth.getName());
 		return modelAndView;
 	}
 	@RequestMapping(value="/logout",method=RequestMethod.GET)
-	public ModelAndView goLogOut() {
+	public ModelAndView goLogOut(HttpServletRequest httpServletRequest,HttpSession httpSession) {
 		ModelAndView modelAndView = new ModelAndView();
 		User user = new User();
 		modelAndView.addObject("user", user);
 		modelAndView.setViewName("login");
+		/*Removing session and it's attributes .... */
+		SecurityContextHolder.getContext().setAuthentication(null);
+		httpSession.invalidate();
+		SecurityContextHolder.clearContext();
+		removeCookies(httpServletRequest);
 		return modelAndView;
+	}
+	public static void removeCookies(HttpServletRequest httpServletRequest) {
+		Cookie[] cookies = httpServletRequest.getCookies();
+		if(cookies != null && cookies.length > 0 ) {
+			for(int i = 0; i < cookies.length;i++) {
+				cookies[i].setMaxAge(0);
+			}
+		}
 	}
 	@RequestMapping(value="/access-denied",method=RequestMethod.GET)
 	public ModelAndView accessDenied() {
