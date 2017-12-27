@@ -1,6 +1,5 @@
 package com.marsboy.vshare.controller;
 
-import java.util.Enumeration;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +52,7 @@ public class UserController {
 		ModelAndView modelAndView = new ModelAndView();
 		User userExists = videoService.getUserByUsername(user.getUsername());
 		if (userExists != null) {
-			bindingResult.rejectValue("email", "error.user",
+			bindingResult.rejectValue("username", "error.user",
 					"There is already a user registered with the email provided");
 		}
 		if (bindingResult.hasErrors()) {
@@ -75,7 +74,6 @@ public class UserController {
 	@RequestMapping(value="/home",method=RequestMethod.GET)
 	public ModelAndView goToHome(HttpSession httpSession) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println("Logged in user :: "+auth.getName());
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("home");
 		httpSession.setAttribute("UserName",auth.getName());
