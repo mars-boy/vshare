@@ -1,6 +1,7 @@
 package com.marsboy.vshare.model;
-// Generated Dec 24, 2017 7:38:59 PM by Hibernate Tools 5.2.6.Final
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +10,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -27,6 +29,7 @@ public class User implements java.io.Serializable {
 	private String username;
 	private String password;
 	private byte active;
+	private Set<Video> videos = new HashSet<Video>(0);
 
 	public User() {
 	}
@@ -36,6 +39,14 @@ public class User implements java.io.Serializable {
 		this.username = username;
 		this.password = password;
 		this.active = active;
+	}
+
+	public User(Role role, String username, String password, byte active, Set<Video> videos) {
+		this.role = role;
+		this.username = username;
+		this.password = password;
+		this.active = active;
+		this.videos = videos;
 	}
 
 	@Id
@@ -85,6 +96,15 @@ public class User implements java.io.Serializable {
 
 	public void setActive(byte active) {
 		this.active = active;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	public Set<Video> getVideos() {
+		return this.videos;
+	}
+
+	public void setVideos(Set<Video> videos) {
+		this.videos = videos;
 	}
 
 }

@@ -1,5 +1,4 @@
 package com.marsboy.vshare.model;
-// Generated Dec 24, 2017 7:38:59 PM by Hibernate Tools 5.2.6.Final
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +23,7 @@ public class Role implements java.io.Serializable {
 	private byte roleid;
 	private String rolename;
 	private Set<User> users = new HashSet<User>(0);
+	private Set<User> users_1 = new HashSet<User>(0);
 
 	public Role() {
 	}
@@ -33,10 +33,11 @@ public class Role implements java.io.Serializable {
 		this.rolename = rolename;
 	}
 
-	public Role(byte roleid, String rolename, Set<User> users) {
+	public Role(byte roleid, String rolename, Set<User> users, Set<User> users_1) {
 		this.roleid = roleid;
 		this.rolename = rolename;
 		this.users = users;
+		this.users_1 = users_1;
 	}
 
 	@Id
@@ -66,6 +67,15 @@ public class Role implements java.io.Serializable {
 
 	public void setUsers(Set<User> users) {
 		this.users = users;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
+	public Set<User> getUsers_1() {
+		return this.users_1;
+	}
+
+	public void setUsers_1(Set<User> users_1) {
+		this.users_1 = users_1;
 	}
 
 }
