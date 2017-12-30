@@ -3,6 +3,7 @@ package com.marsboy.vshare.controller;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +33,7 @@ public class UserController {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView login() {
+	public ModelAndView login(HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		User user = new User();
 		modelAndView.addObject("user", user);
@@ -91,18 +93,24 @@ public class UserController {
 		return modelAndView;
 	}
 	@RequestMapping(value="/logout",method=RequestMethod.GET)
-	public ModelAndView goLogOut(HttpServletRequest httpServletRequest,HttpSession httpSession) {
+	public ModelAndView goLogOut(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse,HttpSession httpSession) {
 		ModelAndView modelAndView = new ModelAndView();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("came here");
+	    if (auth != null){    
+	        new SecurityContextLogoutHandler().logout(httpServletRequest,httpServletResponse, auth);
+	    }
 		User user = new User();
 		modelAndView.addObject("user", user);
 		modelAndView.setViewName("login");
-		/*Removing session and it's attributes .... */
+		modelAndView.addObject("logoutstatus", "Logout successful");
 		SecurityContextHolder.getContext().setAuthentication(null);
 		httpSession.invalidate();
 		SecurityContextHolder.clearContext();
 		removeCookies(httpServletRequest);
 		return modelAndView;
 	}
+	
 	public static void removeCookies(HttpServletRequest httpServletRequest) {
 		Cookie[] cookies = httpServletRequest.getCookies();
 		if(cookies != null && cookies.length > 0 ) {
