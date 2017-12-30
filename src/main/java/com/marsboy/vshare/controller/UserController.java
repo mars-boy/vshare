@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.marsboy.vshare.model.Role;
@@ -38,6 +39,16 @@ public class UserController {
 		return modelAndView;
 	}
 
+	@RequestMapping(value="/login",method=RequestMethod.GET)
+	public ModelAndView loginError(@RequestParam(value = "error", required = false) String error) {
+		ModelAndView modelAndView = new ModelAndView();
+		if(error!=null) {
+			modelAndView.addObject("error", "Invalid username or password");
+		}
+		modelAndView.setViewName("login");
+		return modelAndView;
+	}
+	
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)
 	public ModelAndView registration() {
 		ModelAndView modelAndView = new ModelAndView();
